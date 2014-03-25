@@ -1,5 +1,7 @@
 require(reshape2)
 require(ggplot2)
+library(ars)
+library(dplyr)
 
 ## Models
 # 
@@ -31,12 +33,10 @@ f  = function(x) -n*log(1+x)/2 - y2/(1+x)  /2
 fp = function(x) -n   /(1+x)/2 + y2/(1+x)^2/2
 curve(f,0,2)
 
-samps = ars(1000,f,fp,x=1:10, lb=TRUE)
+samps = ars(10000,f,fp,x=1:10, lb=TRUE)
 hist(samps, 100, prob=TRUE)
 curve(dnorm(x, mean(samps), sd(samps)), add=TRUE, col="red")
 curve(dnorm(x, y2/n-1, y2/n*sqrt(2/n)), add=TRUE, col="blue")
 
 # t-distribution
-f = function(x, y) {
-  sum(dt(y,0,))
-}
+f = function(x, y) { sum(dt(y,0,5,log=TRUE)) }
