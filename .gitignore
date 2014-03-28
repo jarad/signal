@@ -4,3 +4,10 @@
 # Example code in package build process
 *-Ex.R
 .Rproj.user
+
+# LaTeX files
+*.log
+*.nav
+*.pdf
+*.snm
+*.toc
