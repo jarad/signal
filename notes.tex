@@ -9,14 +9,17 @@
 \institute[Iowa State]{Iowa State University}
 \date{\today}
 
+
+\newcommand{\I}{\mathrm{I}}
+
 \begin{document}
 
 \begin{frame}
 \maketitle
 \end{frame}
 
-\newcommand{\I}{\mathrm{I}}
 
+\section{Motivation}
 \begin{frame}
 \frametitle{Independent normal model}
 Consider the model 
@@ -61,21 +64,29 @@ Comments:
 
 \begin{frame}
 \frametitle{Empirical Bayes interpretation}
+\small
 
-Let $\theta \sim N(0,\tau^2\I)$ then 
-\[ \mu|y,\sigma^2,\tau^2 \sim N(By,B\I) \mbox{ where } B = 1-\frac{\sigma^2}{\tau^2+\sigma^2} \]
+For simplicity, let $\sigma^2=1$. \pause Now assume $\theta \sim N(0,\lambda^2\I)$ \pause then 
+\[ \theta|y,\lambda^2 \sim N(By,B\I) \pause \mbox{ where } B = 1-\frac{1}{1+\lambda^2} \]
 
 
-\[ y \sim N(0,[\sigma^2+\tau^2]\I) \]
+\[ y \sim N(0,[1+\lambda^2]\I) \]
 and the sum of squares
-\[ S = ||Y||^2\sim (\sigma^2+\tau^2) \chi^2_n \]
+\[ S = ||y||^2\sim (1+\lambda^2) \chi^2_n \]
 so that 
-\[ E \left[ \frac{n-2}{S} = \frac{\sigma^2}{\sigma^2+\tau^2} \right] 
+\[ E \left[ \frac{n-2}{S} \right] = \frac{1}{1+\lambda^2}  \]
 
+Thus, the James-Stein estimator replaces $1/(1+\lambda^2)$ with an unbiased estimator of it:
 
-\[ \theta|y,\tau^2,\sigma^2 \sim N\left( , \left[\frac{1}{\tau^2}+\frac{1}{\sigma^2}\right]^{-1}\right)
+\[ \hat{\theta}_{JS} = \left( 1-\frac{(n-2)}{S}\right)y \]
 
 \end{frame}
+
+
+
+\section{Models via scale-mixtures of normals}
+
+
 
 
 \end{document}

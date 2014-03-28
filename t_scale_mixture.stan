@@ -18,6 +18,6 @@ model {
     lambda2[i] ~ gamma(df/2, df*pow(tau,2)/2);
   }
 
-#  sigma     ~ uniform(0,100);
+#  sigma ~ uniform(0,100);
   tau ~ uniform(0,100);
 }

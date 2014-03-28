@@ -14,7 +14,7 @@ model {
   for (i in 1:n) {
     y[i] ~ normal(theta[i], 1);
     theta[i] ~ normal(0, lambda[i]);
-    lambda[i] ~ cauchy(0,tau)T[0,];
+    lambda[i] ~ cauchy(0,tau)T[0,]; 
   }
 
 #  sigma     ~ uniform(0,100);
