@@ -1,8 +1,81 @@
-\documentclass{beamer}
+\documentclass[handout]{beamer}
+
+\usetheme{AnnArbor}\usecolortheme{beaver}
+
+\usepackage{amsmath}
+
+\title[Sparse signals]{Models for sparse signals via scale-mixtures of normals}
+\author{Jarad Niemi}
+\institute[Iowa State]{Iowa State University}
+\date{\today}
 
 \begin{document}
 
+\begin{frame}
+\maketitle
+\end{frame}
 
+\newcommand{\I}{\mathrm{I}}
+
+\begin{frame}
+\frametitle{Independent normal model}
+Consider the model 
+\[ Y_i \stackrel{ind}{\sim} N(\theta_i,\sigma^2) \]
+\pause or, equivalently,
+\[ Y \sim N(\theta, \sigma^2\I). \]
+where $\theta = (\theta_1,\ldots,\theta_n)'$ is the quantity of interest.
+
+\vspace{0.2in} \pause
+
+The ordinary estimator $\hat{\theta}_{MOM} = \hat{\theta}_{LS} = \hat{\theta}_{MLE} = Y$ \pause is
+
+\begin{itemize}
+\item \alert{unbiased} since $E[Y|\theta]=\theta$ \pause and 
+\item \alert{admissible}\footnote{no other estimator \alert{dominates} it} when $n\le 2$.
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{James-Stein estimator}
+\small
+When $n>2$, the James-Stein estimator 
+\[ \hat{\theta}_{JS} = \left( 1-\frac{(n-2)\sigma^2}{||y||^2}\right)y \]
+where $||y||^2=y'y$ \pause \alert{dominates} $\hat{\theta}=Y$ and thus the ordinary estimator is inadmissible.
+
+\vspace{0.2in} \pause
+
+If $(n-2)\sigma^2 < ||y||^2$, then the estimator shrinks the ordinary estimator $\hat{\theta}=y$ toward zero.
+
+\vspace{0.2in} \pause 
+
+Comments:
+\begin{itemize}[<+->]
+\item shrinkage can occur toward any point
+\item the James-Stein estimator is inadmissible
+\item it works even when $\sigma^2$ is replaced with 
+\[ \hat{\sigma}^2 = \frac{1}{n}\sum_{i=1}^n (y_i=\overline{y})^2 \]
+\end{itemize}
+\end{frame}
+  
+
+\begin{frame}
+\frametitle{Empirical Bayes interpretation}
+
+Let $\theta \sim N(0,\tau^2\I)$ then 
+\[ \mu|y,\sigma^2,\tau^2 \sim N(By,B\I) \mbox{ where } B = 1-\frac{\sigma^2}{\tau^2+\sigma^2} \]
+
+
+\[ y \sim N(0,[\sigma^2+\tau^2]\I) \]
+and the sum of squares
+\[ S = ||Y||^2\sim (\sigma^2+\tau^2) \chi^2_n \]
+so that 
+\[ E \left[ \frac{n-2}{S} = \frac{\sigma^2}{\sigma^2+\tau^2} \right] 
+
+
+\[ \theta|y,\tau^2,\sigma^2 \sim N\left( , \left[\frac{1}{\tau^2}+\frac{1}{\sigma^2}\right]^{-1}\right)
+
+\end{frame}
 
 
 \end{document}
