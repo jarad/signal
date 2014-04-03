@@ -2,7 +2,7 @@
 
 \usetheme{AnnArbor}\usecolortheme{beaver}
 
-\usepackage{amsmath,verbatim}
+\usepackage{amsmath,verbatim,graphicx}
 
 \title[Sparse signals]{Horseshoe prior}
 \author{Jarad Niemi}
@@ -18,16 +18,27 @@
 \maketitle
 \end{frame}
 
+
+\begin{frame}
+\frametitle{Literature}
+\begin{itemize}
+\item Carvalho, Carlos M., Nicholas G. Polson, and James G. Scott. "Handling sparsity via the horseshoe." International Conference on Artificial Intelligence and Statistics. 2009.
+\item Carvalho, Carlos M., Nicholas G. Polson, and James G. Scott. "The horseshoe estimator for sparse signals." Biometrika 97.2 (2010): 465-480.
+\end{itemize}
+
+\end{frame}
+
+
 \begin{frame}
 \frametitle{A model for sparse signals}
 
 Consider the model 
 \[ y \sim N(\theta,\sigma^2 \I) \]
-where $y$ and $\theta$ have dimension $p$ where $\theta$ is \alert{sparse}, i.e. it has many zero (or nearly zero) entries.
+where $y$ and $\theta$ have dimension $p$\pause and where $\theta$ is \alert{sparse}, i.e. it has many zero (or nearly zero) entries.
 
 \vspace{0.2in} \pause
 
-Some common priors (penalities) for $\theta$ that encourage sparsity are 
+Some well-known priors (penalities) for $\theta$ that encourage sparsity are 
 \begin{itemize}
 \item Normal (ridge)
 \item t 
@@ -39,12 +50,12 @@ Some common priors (penalities) for $\theta$ that encourage sparsity are
 \begin{frame}
 \frametitle{Normal (ridge) prior}
 
-Let 
+Consider 
 \[ \begin{array}{rl}
-y_i &\stackrel{ind}{\sim} N(\theta_i,\sigma^2) \\
+y_i &\stackrel{ind}{\sim} N(\theta_i,1) \\
 \theta_i &\stackrel{ind}{\sim} N(0,\lambda_i^2) 
 \end{array} \]
-\pause with $\sigma^2=1$ for simplicity and $\lambda_i^2$ being unknown. \pause Then 
+\pause with $\lambda_i^2$ being unknown. \pause Then 
 \[ E[\theta_i|y] = \int_0^1 (1-\kappa_i) y_i p(\kappa_i|y) d\kappa_i = (1-E[\kappa_i|y]) y_i \]
 where $\kappa_i=1/(1+\lambda_i^2)$ \pause and $(1-E[\kappa_i|y])$ determines the amount of shrinkage toward 0 for data $y_i$. 
 
@@ -68,12 +79,13 @@ where $\lambda_i$ has some distribution, e.g.
 \begin{tabular}{lll}
 Prior for $\theta_i$ & Density for $\lambda_i$ & Density for $\kappa_i$ \\
 \hline
-Laplace (double-exponential) & $\lambda_i e^{\lambda_i^2/2}$ & $\kappa_i^{-2}e^{-1/2\kappa_i}$ \\
+Laplace (double-exponential) & $\lambda_i e^{-\lambda_i^2/2}$ & $\kappa_i^{-2}e^{-1/2\kappa_i}$ \\
 Cauchy & $\lambda_i^{-2} e^{-1/2\lambda_i^2}$ & $\kappa_i^{-1/2} (1-\kappa_i)^{-3/2}e^{-\kappa_i/2(1-\kappa_i)}$ \\
 Strawderman-Berger & $\lambda_i (1+\lambda_i^2)^{-3/2}$ & $\kappa_i^{-1/2}$ \\
 Normal-exponential-gamma & $\lambda_i (1+\lambda_i^2)^{-(c+1)}$ & $\kappa_i^{c-1}$ \\
-Normal-Jeffreys & $1/\lambda_i$ & $\kappa_i^{-1}(1-\kappa_i)^{-1}$ \\
+Normal-Jeffreys $(1/|\theta_i|)$ & $1/\lambda_i$ & $\kappa_i^{-1}(1-\kappa_i)^{-1}$ \\
 Horseshoe & $(1+\lambda_i^2)^{-1}$ & $\kappa_i^{-1/2}(1-\kappa_i)^{-1/2}$ \\
+Point-mass $(\pi g(\theta_i)+(1-\pi)\delta_0)$ & $\pi h(\lambda_i) + (1-\pi)\delta_0$ & \\
 \hline
 \end{tabular}
 \end{center}
@@ -83,27 +95,102 @@ Horseshoe & $(1+\lambda_i^2)^{-1}$ & $\kappa_i^{-1/2}(1-\kappa_i)^{-1/2}$ \\
 
 
 \begin{frame}
-\frametitle{Marginal densities for $\theta_i$ under horseshoe}
+\frametitle{Marginal density for $\theta_i$ under horseshoe}
 
 The marginal density for $\theta_i$ under the horseshoe prior is 
-\[ p(\theta_i) \propto \int_0^\infty \frac{1}{\lambda_i(1+\lambda_i^2)} e^{-\theta^2/2\lambda_i^2} d\lambda_i \]
+\[ p(\theta_i) \propto \int_0^\infty \frac{1}{\lambda_i(1+\lambda_i^2)} e^{-\theta_i^2/2\lambda_i^2} d\lambda_i \]
 \pause has no closed form, but the density satisfies the following inequalities for $\theta_i\ne 0$: \pause 
 \[ \frac{K}{2}\log\left( 1+\frac{4}{\theta_i^2}\right) < p(\theta_i) < K\log\left(1+\frac{2}{\theta_i^2} \right) \]
-where $K=1/(2\pi^3)^{1/2}$. \pause Notice that $p(\theta_i)\to \infty$ logarithmically fast as $\theta\to 0$. 
+where $K=1/(2\pi^3)^{1/2}$. \pause Notice that $p(\theta_i)\to \infty$ as $\theta\to 0$. 
 
 \end{frame}
 
 
 
 \begin{frame}[fragile]
-\frametitle{Comparison of the density of some priors}
-<<densities>>=
-
+\frametitle{Comparison of $\theta_i$ density for some priors}
+<<densities, echo=FALSE, fig.width=10, fig.height=5>>=
+xmin = c(-3,4); xmax = c(3,7); ylm = c(0.5,0.025)
+par(mfrow=c(1,2))
+for (i in 1:2) {
+  curve(dcauchy(x),xmin[i], xmax[i], ylim=c(0,ylm[i]))
+  curve(dexp(abs(x))/2, add=TRUE, lty=2, col=2)
+  K = 1/sqrt(2*pi^3)
+  curve(K*log(1+4/x^2)/2, add=TRUE, lty=3, n=1001, col=3, lwd=3)
+  curve(K*log(1+2/x^2), add=TRUE, lty=3, n=1001, col=3, lwd=3)
+  legend("topright", c("Cauchy","Laplace","Horseshoe"), col=c(1,2,3), lty=1:3)
+}
 @
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Comparison of the implied density for $\kappa_i$}
+\begin{center}
+\includegraphics[page=4, trim=0.85in 4.3in 1in 2.5in, width=0.8\textwidth, clip]{CarvalhoPolsonScott2010}
+\end{center}
+\end{frame}
+
+
+
+
+
+
+\begin{frame}
+\frametitle{Posterior mean under LASSO vs Horseshoe}
+
+\begin{center}
+\includegraphics[page=4, trim=4in 7in 1in 1in, width=0.8\textwidth, clip]{Carvalhoetal2009}
+\end{center}
 
 \end{frame}
 
 
+
+\begin{frame}
+\frametitle{Interpreting $1-\hat{\kappa}_i$ as posterior probabilities of a signal}
+
+\begin{center}
+\includegraphics[page=10, trim=0.7in 7.1in 1in 0.8in, width=\textwidth, clip]{CarvalhoPolsonScott2010}
+\end{center}
+
+\end{frame}
+
+
+
+\begin{frame}
+\frametitle{Squared-error loss for 100w\% signals from $t_\xi(0,3)$ distribution over 500 data sets}
+
+\begin{center}
+\includegraphics[page=11, trim=0.7in 7.3in 0.7in 0.8in, width=\textwidth, clip]{CarvalhoPolsonScott2010}
+\end{center}
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Horseshoe model}
+
+Model from Carvalho 2009:
+\[ \begin{array}{rl}
+y_i &\stackrel{ind}{\sim} N(\theta_i,\sigma^2) \\
+\theta_i &\stackrel{ind}{\sim} N(0,\lambda_i^2\tau^2) \\
+\lambda_i & Ca^+(0,1) \\
+\tau & Ca^+(0,1) 
+\end{array} \]
+
+\vspace{0.2in} \pause 
+
+Model from Carvalho 2010:
+\[ \begin{array}{rl}
+y_i &\stackrel{ind}{\sim} N(\theta_i,\sigma^2) \\
+\theta_i &\stackrel{ind}{\sim} N(0,\lambda_i^2) \\
+\lambda_i & Ca^+(0,\tau) \\
+\tau & Ca^+(0,\sigma) 
+\end{array} \]
+
+
+\end{frame}
 
 
 
