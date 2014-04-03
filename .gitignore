@@ -8,7 +8,6 @@
 # LaTeX files
 *.log
 *.nav
-*.pdf
 *.snm
 *.toc
 *concordance.tex
