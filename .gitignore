@@ -11,3 +11,6 @@
 *.pdf
 *.snm
 *.toc
+*concordance.tex
+*.synctex.gz
+*.vrb
