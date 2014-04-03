@@ -175,8 +175,8 @@ Model from Carvalho 2009:
 \[ \begin{array}{rl}
 y_i &\stackrel{ind}{\sim} N(\theta_i,\sigma^2) \\
 \theta_i &\stackrel{ind}{\sim} N(0,\lambda_i^2\tau^2) \\
-\lambda_i & Ca^+(0,1) \\
-\tau & Ca^+(0,1) 
+\lambda_i &\sim Ca^+(0,1) \\
+\tau &\sim Ca^+(0,1) 
 \end{array} \]
 
 \vspace{0.2in} \pause 
@@ -185,8 +185,8 @@ Model from Carvalho 2010:
 \[ \begin{array}{rl}
 y_i &\stackrel{ind}{\sim} N(\theta_i,\sigma^2) \\
 \theta_i &\stackrel{ind}{\sim} N(0,\lambda_i^2) \\
-\lambda_i & Ca^+(0,\tau) \\
-\tau & Ca^+(0,\sigma) 
+\lambda_i &\sim Ca^+(0,\tau) \\
+\tau &\sim Ca^+(0,\sigma) 
 \end{array} \]
 
 
