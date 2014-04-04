@@ -1,8 +1,18 @@
-\documentclass[handout]{beamer}
+\documentclass{beamer} 
 
+\usecolortheme[RGB={0,0,144}]{structure}
 \usetheme{AnnArbor}\usecolortheme{beaver}
+%\usetheme{CambridgeUS}\usecolortheme{crane}
 
-\usepackage{amsmath,verbatim,graphicx}
+\usepackage{verbatim,xmpmulti,color,multicol,multirow}
+\setlength{\unitlength}{\textwidth}  % measure in textwidths
+\usepackage[normalem]{ulem}
+
+%\usepackage{beamerthemesplit}
+\setbeamertemplate{navigation symbols}{}
+%\setbeamercolor{alerted text}{fg=red}
+%\setbeamertemplate{block body theorem}{bg=orange}
+\setkeys{Gin}{width=0.6\textwidth}
 
 \title[Sparse signals]{Horseshoe prior}
 \author{Jarad Niemi}
@@ -22,7 +32,7 @@
 \begin{frame}
 \frametitle{Literature}
 \begin{itemize}
-\item Carvalho, Carlos M., Nicholas G. Polson, and James G. Scott. "Handling sparsity via the horseshoe." International Conference on Artificial Intelligence and Statistics. 2009.
+\item Carvalho, Carlos M., Nicholas G. Polson, and James G. Scott. "Handling sparsity via the horseshoe." International Conference on Artificial Intelligence and Statistics. 2009.  
 \item Carvalho, Carlos M., Nicholas G. Polson, and James G. Scott. "The horseshoe estimator for sparse signals." Biometrika 97.2 (2010): 465-480.
 \end{itemize}
 
@@ -34,12 +44,12 @@
 
 Consider the model 
 \[ y \sim N(\theta,\sigma^2 \I) \]
-where $y$ and $\theta$ have dimension $p$\pause and where $\theta$ is \alert{sparse}, i.e. it has many zero (or nearly zero) entries.
+where $y$ and $\theta$ have dimension $p$ \pause and where $\theta$ is \alert{sparse}, \pause i.e. it has many zero (or nearly zero) entries.
 
 \vspace{0.2in} \pause
 
 Some well-known priors (penalities) for $\theta$ that encourage sparsity are 
-\begin{itemize}
+\begin{itemize}[<+->]
 \item Normal (ridge)
 \item t 
 \item Laplace (LASSO)
